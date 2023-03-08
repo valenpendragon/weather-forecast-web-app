@@ -2,7 +2,7 @@ import os
 import requests
 
 
-def get_data(place: str, forecast_days=1, data_type="Temperature"):
+def get_data(place: str, forecast_days=1):
     """This function uses place to determine the location for the weather
     data, forecast_days for the number of days to return, and data_type
     for the structure or appearance of the data: graphical p[otting of
@@ -19,14 +19,8 @@ def get_data(place: str, forecast_days=1, data_type="Temperature"):
     data = response.json()
     no_data_values = 8 * forecast_days
     filtered_data = data["list"][:no_data_values]
-    temps = [dict["main"]["temp"] for dict in filtered_data]
-    conditions = [dict["weather"][0]["main"] for dict in filtered_data]
-    dates = [dict["dt_txt"] for dict in filtered_data]
-    if data_type == "Temperature":
-        return temps
-    else:
-        return conditions
+    return filtered_data
 
 
 if __name__ == "__main__":
-    print(get_data("pickerington", forecast_days=3, data_type="Temperature"))
+    print(get_data("pickerington", forecast_days=3))
