@@ -46,7 +46,7 @@ if place:
         if option == "Sky":
             # Create sky conditions output
             image_paths = [ICONS[condition] for condition in conditions]
-            st.image(image_paths)
+            st.image(image_paths, caption=dates)
     else:
         st.write(f"{place} was not found in available weather data.")
         st.write("Double check the spelling and try again.")
