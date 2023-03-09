@@ -11,15 +11,18 @@ def get_data(place: str, forecast_days=1):
     calling program.
     :return: data
     """
-    #api_key = os.getenv("WMORG_API_KEY")
-    api_key = "66717d17d42c5f3711a5e0aa863c6d1f"
+    api_key = os.getenv("WMORG_API_KEY")
     url = f"http://api.openweathermap.org/data/2.5/forecast?q={place}" \
           f"&appid={api_key}&units=imperial"
     response = requests.get(url)
     data = response.json()
     no_data_values = 8 * forecast_days
-    filtered_data = data["list"][:no_data_values]
-    return filtered_data
+    try:
+        filtered_data = data["list"][:no_data_values]
+    except KeyError:
+        return None
+    else:
+        return filtered_data
 
 
 if __name__ == "__main__":

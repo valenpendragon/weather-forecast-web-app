@@ -28,21 +28,25 @@ days = st.slider("Forecast Days", min_value=1, max_value=5,
                  help="Select number of forecasted days", step=1)
 option = st.selectbox("Select data to view",
                       options=("Temperature", "Sky"))
-st.subheader(f"{option} for the following {days} day(s) in {place}")
+st.subheader(f"{option} for the following {days} day(s) in {place.title()}")
 
 if place:
     # Get the temperature/sky data
     filtered_data = get_data(place, days)
-    temps = [dict["main"]["temp"] for dict in filtered_data]
-    conditions = [dict["weather"][0]["main"] for dict in filtered_data]
-    dates = [dict["dt_txt"] for dict in filtered_data]
+    if filtered_data:
+        temps = [dict["main"]["temp"] for dict in filtered_data]
+        conditions = [dict["weather"][0]["main"] for dict in filtered_data]
+        dates = [dict["dt_txt"] for dict in filtered_data]
 
-    if option == "Temperature":
-        # Create temperature plot
-        figure = px.line(x=dates, y=temps, labels={"x": "Data", "y": "Temperature (C)"})
-        st.plotly_chart(figure)
+        if option == "Temperature":
+            # Create temperature plot
+            figure = px.line(x=dates, y=temps, labels={"x": "Data", "y": "Temperature (C)"})
+            st.plotly_chart(figure)
 
-    if option == "Sky":
-        # Create sky conditions output
-        image_paths = [ICONS[condition] for condition in conditions]
-        st.image(image_paths)
+        if option == "Sky":
+            # Create sky conditions output
+            image_paths = [ICONS[condition] for condition in conditions]
+            st.image(image_paths)
+    else:
+        st.write(f"{place} was not found in available weather data.")
+        st.write("Double check the spelling and try again.")
